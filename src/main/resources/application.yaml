@@ -1,3 +1,32 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: authentication-service
+  profiles:
+    active: local
+
+  datasource:
+    hikari:
+      connection-timeout: 5000
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+application:
+  integration:
+    user-service:
+      url: http://localhost:8080
+  security:
+    jwt:
+      secret-key: 8ify9bC8hqNAE3Y/A4SatBDXR539wGPO3AEFMrXKQwAv8uxQmgB7rwCHLgN7c3Oe8mZbQ7s+/DhKizAqDRjkXw==
+      access-token-expiration: 900000
+      refresh-token-expiration: 604800000
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%5p) %clr(${PID:- }){magenta} --- [%15.15t] %clr(%-40.40logger{36}){cyan} [%X{traceId:-none}] : %m%n"
+  level:
+    root: INFO
