@@ -57,8 +57,8 @@ public final class UserTestData {
         .password(ENCODED_PASSWORD)
         .role(DEFAULT_ROLE)
         .active(active)
-        .created_at(OffsetDateTime.now())
-        .updated_at(OffsetDateTime.now())
+        .createdAt(OffsetDateTime.now())
+        .updatedAt(OffsetDateTime.now())
         .build();
   }
 
