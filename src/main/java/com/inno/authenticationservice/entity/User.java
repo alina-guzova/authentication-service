@@ -49,9 +49,9 @@ public class User {
 
   @Column(name = "created_at", nullable = false, updatable = false)
   @CreatedDate
-  OffsetDateTime created_at;
+  OffsetDateTime createdAt;
 
   @Column(name = "updated_at", nullable = false)
   @LastModifiedDate
-  OffsetDateTime updated_at;
+  OffsetDateTime updatedAt;
 }
