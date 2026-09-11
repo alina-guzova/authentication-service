@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: auth-service-db
+  namespace: dev
+spec:
+  serviceName: auth-service-db-service
+  selector:
+    matchLabels:
+      app: auth-service-db
+  template:
+    metadata:
+      labels:
+        app: auth-service-db
+    spec:
+      containers:
+        - name: auth-service-db
+          image: postgres:17-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: auth-db-port
+              containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: auth-service-db-config
+            - secretRef:
+                name: auth-service-db-secret
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - exec pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - exec pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          volumeMounts:
+            - name: pgdata-auth
+              mountPath: /var/lib/postgresql/data
+
+  volumeClaimTemplates:
+    - metadata:
+        name: pgdata-auth
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
