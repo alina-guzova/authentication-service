@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-service-db-config
+  namespace: dev
+data:
+  POSTGRES_DB: auth_service_db
